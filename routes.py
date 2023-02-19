@@ -1,18 +1,20 @@
 from datetime import datetime, timedelta
+from typing import Union
 
 from . import app
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, Response
 from .forms import LoginForm, SignUpForm
 from .database import User, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user
+from flask_login import login_user, login_required, logout_user
 from .weather_api import get_weather, get_current_city
 from .communicate_with_db import add_new_obj_to_db
 
 
 @app.route('/')
 @app.route('/main')
-def main():
+@login_required
+def main() -> str:
     city = get_current_city()
     weather = get_weather()
     current_date = datetime.now()
@@ -20,7 +22,7 @@ def main():
 
 
 @app.route("/login", methods=('GET', 'POST'))
-def login():
+def login() -> Union[str, Response]:
     form = LoginForm()
     if form.validate_on_submit():
         user = session.query(User).where(User.nickname == form.nickname.data).first()
@@ -31,7 +33,7 @@ def login():
 
 
 @app.route("/signup", methods=('GET', 'POST'))
-def signup():
+def signup() -> Union[str, Response]:
     form = SignUpForm()
     if form.validate_on_submit():
         new_user = User(
@@ -42,6 +44,12 @@ def signup():
         add_new_obj_to_db(new_user)
         return redirect(url_for("login"))
     return render_template("signup.html", form=form)
+
+
+@app.route('/logout')
+def logout() -> Response:
+    logout_user()
+    return redirect(url_for("login"))
 
 
 @app.errorhandler(404)

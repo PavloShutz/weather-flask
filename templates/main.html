@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
+{% from 'bootstrap5/nav.html' import render_nav_item %}
 
 {% block title %}Calendar{% endblock %}
 
 {% block content %}
-    <div class="weather-info" style="text-align: center;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="navbar-nav mr-auto">
+            {{ render_nav_item('logout', 'Log Out') }}
+        </div>
+    </nav>
+    <br>
+    <div class="weather-info">
         <h1 style="font-family: 'Oswald', sans-serif;text-align: center;">{{ city }}</h1>
-        <div class="card-group" style="width: 50%; margin: 0 auto">
+        <div class="card-group" style="width: 80%; margin: 0 auto">
             {% for item in weather %}
                 <div class="card">
                     <img src="{{ item['icon'] }}" class="card-img-top" alt="weather icon">
@@ -19,7 +26,7 @@
                         </h5>
                         <p class="card-text">
                             <ul>
-                                <li>What is the weather outside? <strong>{{ item['description'] }}</strong></li>
+                                <li>What is the weather outside? <strong>{{ item['description']|title }}</strong></li>
                                 <li>And the temperature? <strong>{{ item['temperature'] }} ⁰C</strong></li>
                                 <li>And how about the speed of wind? <strong>{{ item['speed_of_wind'] }} m/s</strong></li>
                             </ul>

@@ -48,7 +48,7 @@ class User(Base, UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return session.query(User).where(User.id == user_id)
+    return session.query(User).where(User.id == user_id).first()
 
 
 if __name__ == '__main__':
