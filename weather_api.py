@@ -7,10 +7,16 @@ load_dotenv()
 API_KEY = os.getenv('API_KEY')
 
 
-def get_weather():
-    """Get weather for the current city."""
+def get_current_city():
+    """Get the current city."""
     location = requests.get('http://ip-api.com/json')
     city = location.json()['city']
+    return city
+
+
+def get_weather():
+    """Get weather for the current city."""
+    city = get_current_city()
     url = f'http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric&lang=en'
     response = requests.get(url)
     data = response.json()

@@ -6,16 +6,17 @@ from .forms import LoginForm, SignUpForm
 from .database import User, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user
-from .weather_api import get_weather
+from .weather_api import get_weather, get_current_city
 from .communicate_with_db import add_new_obj_to_db
 
 
 @app.route('/')
 @app.route('/main')
 def main():
+    city = get_current_city()
     weather = get_weather()
     current_date = datetime.now()
-    return render_template("main.html", weather=weather, date=current_date, timedelta=timedelta)
+    return render_template("main.html", weather=weather, date=current_date, timedelta=timedelta, city=city)
 
 
 @app.route("/login", methods=('GET', 'POST'))
