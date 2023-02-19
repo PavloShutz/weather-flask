@@ -7,6 +7,7 @@ from .database import User, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user
 from .weather_api import get_weather
+from .communicate_with_db import add_new_obj_to_db
 
 
 @app.route('/')
@@ -37,8 +38,7 @@ def signup():
             email=form.email.data,
             password=generate_password_hash(form.password.data)
         )
-        session.add(new_user)
-        session.commit()
+        add_new_obj_to_db(new_user)
         return redirect(url_for("login"))
     return render_template("signup.html", form=form)
 
