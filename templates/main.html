@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block content %}
+    <div class="accordion" id="accordionExample" style="width: 50%; margin: 0 auto">
+        {% for item in weather %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index0 }}" aria-expanded="true" aria-controls="collapseOne">
+                        {% if loop.index0 == 0 %}
+                            Weather for today
+                        {% else %}
+                            Weather for {{ (date + timedelta(days=loop.index0)).strftime("%Y-%m-%d") }}
+                        {% endif %}
+                    </button>
+                </h2>
+                <div id="collapse{{ loop.index0 }}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div><img src="{{ item['icon'] }}" class="rounded float-start"></div>
+                        <ul class="float-end">
+                            <li><strong>What is outside? {{ item['description'] }}</strong></li>
+                            <li><strong>And the temperature? {{ item['temperature'] }} ⁰C</strong></li>
+                            <li><strong>How about speed of wind? {{ item['speed_of_wind'] }} m/s</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
